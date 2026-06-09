@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grupo Kafer · Desempeño (Front-end completo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="module" src="/src/main.js"></script>
+</head>
+<body>
+
+<!-- LOGIN (demo: cualquier dato entra) -->
+<div class="login-bg" id="login">
+  <div class="login-card">
+    <div class="login-mark">K</div><h1>Grupo Kafer</h1><p class="login-sub">Sistema de Desempeño</p>
+    <label>Correo</label><input class="field" id="lEmail" value="fernando@grupokafer.com">
+    <label>Contraseña</label><input class="field" type="password" id="lPass" value="demo">
+    <button class="btn primary block" onclick="entrar()">Entrar</button>
+    <div class="demo-tag">Demo de front-end · cualquier dato entra</div>
+  </div>
+</div>
+
+<div class="app" id="appRoot" style="display:none">
+  <aside class="sidebar">
+    <div class="logo"><button class="burger" onclick="toggleSidebar()" aria-label="Ocultar menú"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button><div class="mark">K</div><div class="logo-txt"><div class="nm">Grupo Kafer</div><div class="sub">Desempeño</div></div></div>
+    <div class="nav-lbl">Principal</div>
+    <div class="nav active" data-v="dashboard" onclick="nav('dashboard')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav" data-v="board" onclick="nav('board')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="5" height="14" rx="1"/></svg>Actividades</div>
+    <div class="nav" data-v="proyectos" onclick="nav('proyectos')"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Proyectos</div>
+    <div class="nav-lbl">Medición</div>
+    <div class="nav" data-v="kpis" onclick="nav('kpis')"><svg viewBox="0 0 24 24"><line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="8"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="3" y1="20" x2="21" y2="20"/></svg>KPIs</div>
+    <div class="nav" data-v="okrs" onclick="nav('okrs')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>OKRs</div>
+    <div class="nav-lbl">Administración</div>
+    <div class="nav" data-v="equipos" onclick="nav('equipos')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="2.6"/><path d="M7 19c0-2.8 2.2-4.6 5-4.6s5 1.8 5 4.6"/><circle cx="4.6" cy="10" r="2"/><path d="M1 18.4c0-2 1.3-3.5 3.4-3.6"/><circle cx="19.4" cy="10" r="2"/><path d="M23 18.4c0-2-1.3-3.5-3.4-3.6"/></svg>Equipos</div>
+    <div class="nav" data-v="usuarios" onclick="nav('usuarios')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.3 3-5.5 7-5.5s7 2.2 7 5.5"/></svg>Usuarios</div>
+    <div class="side-foot"><div class="avatar">F</div><div style="flex:1"><div class="nm">Fernando Lovera</div><div class="rl">Administrador</div></div></div>
+    <div class="mini-row"><button class="mini-btn" onclick="nav('cuenta')">Mi cuenta</button><button class="mini-btn" onclick="salir()">Salir</button></div>
+  </aside>
+  <main>
+    <div class="topbar"><div><h1 id="ttl">Dashboard</h1><p id="sub">Vista general del desempeño del equipo</p></div><div class="topbar-r"><div id="topAction"></div><button id="themeBtn" class="theme-btn" onclick="toggleTheme()" title="Cambiar apariencia (claro / oscuro)">🌙</button></div></div>
+    <div class="content">
+      <section id="view-dashboard" class="view show">
+        <div class="grid4">
+          <div class="stat"><div class="lbl">Cumplimiento global</div><div class="num" id="dPct">—</div><div class="sub">tareas entregadas en fecha</div></div>
+          <div class="stat"><div class="lbl">Tareas atrasadas</div><div class="num bad" id="dLate">0</div><div class="sub">vencidas y sin cerrar</div></div>
+          <div class="stat"><div class="lbl">Promedio KPI</div><div class="num" id="dKpi">—</div><div class="sub">calificación ponderada</div></div>
+          <div class="stat"><div class="lbl">OKRs en riesgo</div><div class="num warn" id="dOkr">0</div><div class="sub">avance bajo 50%</div></div>
+        </div>
+        <div class="two-col">
+          <div class="panel"><h2>Cumplimiento por área</h2><div class="ph">% de tareas entregadas en fecha</div><div id="dByArea"></div></div>
+          <div class="panel"><h2>Cumplimiento por persona</h2><div class="ph">de mayor a menor</div><div id="dByPerson"></div></div>
+        </div>
+      </section>
+      <section id="view-board" class="view">
+        <div class="toolbar"><div class="person-pick"><span id="boardAva" class="pp-ava"></span><select class="field" id="personFilter" onchange="onPersonChange()"></select></div><div class="grow"></div><button class="btn ghost" id="actFilterBtn" onclick="openFilters()" style="display:none">⛃ Filtros<span id="actFilterCount" class="fcount" style="display:none"></span></button><button class="btn ghost" id="actColBtn" onclick="openActColModal()" style="display:none">⚙ Editar columnas</button><button class="btn ghost" id="actSaveBtn" onclick="guardarVista()" style="display:none">💾 Guardar vista</button><button class="btn primary" onclick="openModal()">＋ Nueva tarea</button></div>
+        <div class="act-tabs"><button class="act-tab active" data-bv="lista" onclick="setBoardView('lista')">Lista</button><button class="act-tab" data-bv="kanban" onclick="setBoardView('kanban')">Kanban</button><button class="act-tab" data-bv="calendario" onclick="setBoardView('calendario')">Calendario</button><button class="act-tab" data-bv="archivo" onclick="setBoardView('archivo')">Archivo</button></div>
+        <div id="actViews" class="act-views" style="display:none"></div>
+        <div id="actSearch" class="act-search" style="display:none"><span class="acts-ico">🔍</span><input id="actSearchInput" type="text" placeholder="Buscar por nombre, responsable, proyecto, tipo…" oninput="onActSearch(this.value)"></div>
+        <div id="actFilterSummary" class="act-fsum" style="display:none"></div>
+        <div id="board"></div>
+        <div class="note" id="boardNote"></div>
+      </section>
+      <div class="overlay" id="actColOverlay"><div class="modal">
+        <h3>Editar columnas</h3>
+        <div class="ph">Marca las columnas que quieres ver en la lista</div>
+        <div id="actColPanel" class="colpanel-modal"></div>
+        <div class="actions"><button class="btn primary" onclick="closeActColModal()">Listo</button></div>
+      </div></div>
+      <section id="view-proyectos" class="view">
+        <div class="panel" style="max-width:560px"><h2>Nuevo proyecto</h2><div class="ph">Agrupa varias tareas bajo un mismo proyecto</div>
+          <div class="grp"><label>Nombre del proyecto</label><input class="field" id="pName" placeholder="Ej. Fachada El Campanario"></div>
+          <div class="grp"><label>Descripción</label><input class="field" id="pDesc" placeholder="Breve descripción"></div>
+          <div class="two"><div class="grp"><label>Área</label><select class="field" id="pArea"></select></div><div class="grp"><label>Líder</label><select class="field" id="pLider"></select></div></div>
+          <div class="two"><div class="grp"><label>Inicio</label><input class="field" type="date" id="pIni"></div><div class="grp"><label>Fin estimado</label><input class="field" type="date" id="pFin"></div></div>
+          <div class="grp"><label>Estado</label><select class="field" id="pEstado"><option>Activo</option><option>En pausa</option><option>Cerrado</option></select></div>
+          <button class="btn primary" onclick="addProject()">Crear proyecto</button><div id="pMsg" class="note"></div>
+        </div>
+        <div id="projList"></div>
+      </section>
+      <section id="view-kpis" class="view">
+        <div style="margin-bottom:18px"><div class="seg"><button class="on" id="kPer" onclick="setKpi('persona')">Por persona</button><button id="kAr" onclick="setKpi('area')">Por área</button></div></div>
+        <div id="kpiBody"></div>
+      </section>
+      <section id="view-okrs" class="view">
+        <div style="margin-bottom:18px"><div class="seg"><button class="on" id="oArea" onclick="setOkr('Área')">Por área</button><button id="oPer" onclick="setOkr('Persona')">Por persona</button></div></div>
+        <div id="okrBody"></div>
+      </section>
+      <section id="view-equipos" class="view">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>Equipos</h2><div class="ph">Nombre del equipo y sus miembros</div></div>
+            <div class="head-actions"><button class="btn primary" onclick="openTeamModal()">＋ Crear equipo</button></div>
+          </div>
+          <div class="utable-wrap"><table class="utable eqtable"><thead><tr><th>Nombre del Equipo</th><th>Miembros del Equipo</th></tr></thead><tbody id="teamRows"></tbody></table></div>
+        </div>
+      </section>
+      <div class="overlay" id="teamOverlay"><div class="modal modal-scroll">
+        <h3>Crear equipo</h3>
+        <div class="grp"><label>Nombre del equipo</label><input class="field" id="tName" placeholder="Ej. Compra Venta de Vidrio, Acristala, JFC…"></div>
+        <div class="grp"><label>Descripción del equipo</label><textarea class="field" id="tDesc" rows="2" placeholder="Breve descripción: a qué se dedica este equipo…"></textarea></div>
+        <label class="mp-lbl">Selecciona los usuarios</label>
+        <div id="memberPicker" class="member-picker vert"></div>
+        <div id="tMsg" class="note"></div>
+        <div class="actions"><button class="btn ghost" onclick="closeTeamModal()">Cancelar</button><button class="btn primary" onclick="addTeam()">Crear equipo</button></div>
+      </div></div>
+      <section id="view-usuarios" class="view">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>Usuarios registrados</h2><div class="ph">Personal con acceso al sistema</div></div>
+            <div class="head-actions">
+              <button class="btn ghost" onclick="openColModal()">⚙ Editar columnas</button>
+              <button class="btn primary" onclick="openUserModal()">＋ Agregar usuario</button>
+            </div>
+          </div>
+          <div class="utoolbar">
+            <div class="search"><svg viewBox="0 0 24 24" class="lupa"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><input id="userSearch" class="field" placeholder="Buscar por nombre, correo, cargo, equipo…" oninput="renderUsers()"></div>
+          </div>
+          <div id="bulkBar" class="bulkbar" style="display:none">
+            <span id="bulkCount" class="bulk-count"></span>
+            <div class="grow"></div>
+            <select id="bulkTeam" class="field bulk-sel"></select>
+            <button class="btn ghost" onclick="bulkSetTeam()">Cambiar de equipo</button>
+            <select id="bulkEstatus" class="field bulk-sel"><option>Activo</option><option>Suspendido</option><option>Baja</option></select>
+            <button class="btn ghost" onclick="bulkSetEstatus()">Cambiar estatus</button>
+            <button class="btn danger" onclick="bulkDelete()">Eliminar</button>
+          </div>
+          <div id="userList" class="ulist"></div>
+        </div>
+      </section>
+      <div class="overlay" id="userOverlay"><div class="modal modal-scroll">
+        <h3>Agregar usuario</h3>
+        <div class="two"><div class="grp"><label>Nombre(s)</label><input class="field" id="uName" placeholder="Nombre(s)"></div><div class="grp"><label>Apellidos</label><input class="field" id="uLast" placeholder="Apellidos"></div></div>
+        <div class="two"><div class="grp"><label>Cargo</label><input class="field" id="uCargo" placeholder="Ej. Coordinador de proyectos"></div><div class="grp"><label>Teléfono</label><input class="field" id="uTel" placeholder="722 123 4567"></div></div>
+        <div class="grp"><label>Correo</label><input class="field" id="uEmail" type="email" placeholder="correo@grupokafer.com"></div>
+        <div class="two"><div class="grp"><label>Equipo</label><select class="field" id="uEquipo"></select></div><div class="grp"><label>Área</label><select class="field" id="uArea"></select></div></div>
+        <div class="two"><div class="grp"><label>Rol</label><select class="field" id="uRol"><option value="usuario">Usuario</option><option value="admin">Administrador</option></select></div><div class="grp"><label>Estatus</label><select class="field" id="uEstatus"><option>Activo</option><option>Suspendido</option><option>Baja</option></select></div></div>
+        <div class="grp"><label>Contraseña temporal</label><input class="field" id="uPass" placeholder="mínimo 6 caracteres"></div>
+        <div class="grp"><label>Foto</label><div class="photo-pick"><img id="uFotoPrev" class="photo-prev" alt=""><button type="button" class="btn ghost" onclick="document.getElementById('uFoto').click()">Elegir foto</button><input type="file" id="uFoto" accept="image/*" style="display:none"></div></div>
+        <div id="uMsg" class="note"></div>
+        <div class="actions"><button class="btn ghost" onclick="closeUserModal()">Cancelar</button><button class="btn primary" onclick="addUser()">Agregar usuario</button></div>
+      </div></div>
+      <div class="overlay" id="colOverlay"><div class="modal">
+        <h3>Editar columnas</h3>
+        <div class="ph">Marca las columnas que quieres ver</div>
+        <div id="colPanel" class="colpanel-modal"></div>
+        <div class="actions"><button class="btn primary" onclick="closeColModal()">Listo</button></div>
+      </div></div>
+      <div class="overlay" id="editOverlay"><div class="modal modal-scroll">
+        <h3>Editar usuario</h3>
+        <input type="hidden" id="eId">
+        <div class="two"><div class="grp"><label>Nombre(s)</label><input class="field" id="eName"></div><div class="grp"><label>Apellidos</label><input class="field" id="eLast"></div></div>
+        <div class="two"><div class="grp"><label>Cargo</label><input class="field" id="eCargo"></div><div class="grp"><label>Teléfono</label><input class="field" id="eTel"></div></div>
+        <div class="grp"><label>Correo</label><input class="field" id="eEmail" type="email"></div>
+        <div class="two"><div class="grp"><label>Equipo</label><select class="field" id="eEquipo"></select></div><div class="grp"><label>Área</label><select class="field" id="eArea"></select></div></div>
+        <div class="two"><div class="grp"><label>Rol</label><select class="field" id="eRol"><option value="usuario">Usuario</option><option value="admin">Administrador</option></select></div><div class="grp"><label>Estatus</label><select class="field" id="eEstatus"><option>Activo</option><option>Suspendido</option><option>Baja</option></select></div></div>
+        <div id="eMsg" class="note"></div>
+        <div class="actions"><button class="btn ghost" onclick="closeEditUser()">Cancelar</button><button class="btn primary" onclick="saveEditUser()">Guardar cambios</button></div>
+      </div></div>
+      <section id="view-perfil" class="view">
+        <div id="perfilBody"></div>
+      </section>
+
+      <section id="view-cuenta" class="view">
+        <div class="panel" style="max-width:460px"><h2>Cambiar mi contraseña</h2><div class="ph">Hazlo en tu primer acceso</div>
+          <div class="grp"><label>Contraseña actual</label><input class="field" type="password" id="cAct"></div>
+          <div class="grp"><label>Nueva contraseña</label><input class="field" type="password" id="cNue"></div>
+          <button class="btn primary" onclick="changePass()">Actualizar</button><div id="cMsg" class="note"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal">
+  <h3>Nueva tarea</h3>
+  <div class="grp"><label>Compromiso / tarea</label><input class="field" id="fTitle" placeholder="Ej. Entregar presupuesto de fachada"></div>
+  <div class="two"><div class="grp"><label>Responsable</label><select class="field" id="fWho"></select></div><div class="grp"><label>Área</label><select class="field" id="fArea"></select></div></div>
+  <div class="grp"><label>Proyecto (opcional)</label><select class="field" id="fProj"><option value="">Sin proyecto</option></select></div>
+  <div class="two"><div class="grp"><label>Fecha compromiso</label><input class="field" type="date" id="fDate"></div><div class="grp"><label>Prioridad</label><select class="field" id="fPrio"><option>Alta</option><option selected>Media</option><option>Baja</option></select></div></div>
+  <div class="actions"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="addTask()">Agregar</button></div>
+</div></div>
+<input type="file" id="filePicker" style="display:none">
+<div class="tdrawer-ov" id="taskDrawerOv" onclick="closeTask()"></div>
+<aside class="tdrawer" id="taskDrawer"></aside>
+<div class="tdrawer-ov" id="filterDrawerOv" onclick="closeFilters()"></div>
+<aside class="tdrawer fdrawer" id="filterDrawer"></aside>
+</body>
+</html>

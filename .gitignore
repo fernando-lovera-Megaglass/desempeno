@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vite
+
+# Respaldo del HTML monolítico original (su contenido ya está en index.html + src/)
+kafer_frontend_completo*.html
+
+# Configuración local de Claude Code
+.claude/
